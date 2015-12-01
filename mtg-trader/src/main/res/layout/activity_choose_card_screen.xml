@@ -8,15 +8,21 @@
               android:paddingRight="@dimen/activity_horizontal_margin"
               android:paddingTop="@dimen/activity_vertical_margin"
               android:paddingBottom="@dimen/activity_vertical_margin"
+              android:background="@color/activity_background"
               tools:context="com.gempukku.mtg.trader.ChooseCardScreen">
     <EditText android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:textSize="@dimen/large_font_size"
+              android:textColor="@color/normal_text"
               android:gravity="top"
               android:inputType="text"
               android:hint="@string/card_search_hint"
+              android:textColorHint="@color/additional_text"
               android:id="@+id/cardName"/>
     <ListView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
+            android:background="@drawable/list_background_shape"
+            android:padding="@dimen/list_padding"
             android:id="@+id/matchingCards"/>
 </LinearLayout>

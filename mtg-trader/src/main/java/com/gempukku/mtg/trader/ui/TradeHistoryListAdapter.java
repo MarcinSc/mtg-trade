@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.gempukku.mtg.trader.MtgTraderApplication;
 import com.gempukku.mtg.trader.R;
 import com.gempukku.mtg.trader.dao.CardInfo;
+import com.gempukku.mtg.trader.dao.CardValueMultiplier;
 import com.gempukku.mtg.trader.dao.TradeEntry;
 import com.gempukku.mtg.trader.dao.TradeInfo;
 import com.gempukku.mtg.trader.service.CardProvider;
@@ -57,45 +58,11 @@ public class TradeHistoryListAdapter extends ArrayAdapter<TradeInfo> {
             int profit = 0;
 
             for (TradeEntry tradeEntry : tradeInfo.getTheirCards()) {
-                View separator = vi.inflate(R.layout.history_list_separator_fragment, null);
-                theirCards.addView(separator);
-
-                String cardId = tradeEntry.getCardId();
-                int count = tradeEntry.getCount();
-                int price = tradeEntry.getPrice();
-                float multiplier = tradeEntry.getMultiplier();
-
-                CardInfo cardInfo = MtgTraderApplication.getCardInfo(cardId, _cardProvider);
-
-                int priceTotal = Math.round(price * count * multiplier);
-                profit += priceTotal;
-
-                View cardView = vi.inflate(R.layout.history_single_card_fragment, null);
-                ((TextView) cardView.findViewById(R.id.name)).setText(MtgTraderApplication.formatCardCount(count, cardInfo));
-                ((TextView) cardView.findViewById(R.id.info)).setText(cardInfo.getVersionInfo());
-                ((TextView) cardView.findViewById(R.id.price)).setText(MtgTraderApplication.formatPrice(priceTotal));
-                theirCards.addView(cardView);
+                profit += appendCardLayoutToView(vi, theirCards, tradeEntry);
             }
 
             for (TradeEntry tradeEntry : tradeInfo.getMyCards()) {
-                View separator = vi.inflate(R.layout.history_list_separator_fragment, null);
-                myCards.addView(separator);
-
-                String cardId = tradeEntry.getCardId();
-                int count = tradeEntry.getCount();
-                int price = tradeEntry.getPrice();
-                float multiplier = tradeEntry.getMultiplier();
-
-                CardInfo cardInfo = MtgTraderApplication.getCardInfo(cardId, _cardProvider);
-
-                int priceTotal = Math.round(price * count * multiplier);
-                profit -= priceTotal;
-
-                View cardView = vi.inflate(R.layout.history_single_card_fragment, null);
-                ((TextView) cardView.findViewById(R.id.name)).setText(MtgTraderApplication.formatCardCount(count, cardInfo));
-                ((TextView) cardView.findViewById(R.id.info)).setText(cardInfo.getVersionInfo());
-                ((TextView) cardView.findViewById(R.id.price)).setText(MtgTraderApplication.formatPrice(priceTotal));
-                myCards.addView(cardView);
+                profit -= appendCardLayoutToView(vi, myCards, tradeEntry);
             }
 
             TextView tradeProfit = (TextView) v.findViewById(R.id.tradeProfit);
@@ -106,5 +73,33 @@ public class TradeHistoryListAdapter extends ArrayAdapter<TradeInfo> {
         }
 
         return v;
+    }
+
+    private int appendCardLayoutToView(LayoutInflater vi, ViewGroup theirCards, TradeEntry tradeEntry) {
+        View separator = vi.inflate(R.layout.history_list_separator_fragment, null);
+        theirCards.addView(separator);
+
+        String cardId = tradeEntry.getCardId();
+        int count = tradeEntry.getCount();
+        int price = tradeEntry.getPrice();
+        float multiplier = tradeEntry.getMultiplier();
+
+        CardInfo cardInfo = MtgTraderApplication.getCardInfo(cardId, _cardProvider);
+
+        int priceTotal = Math.round(price * count * multiplier);
+
+        View cardView = vi.inflate(R.layout.history_single_card_fragment, null);
+        ((TextView) cardView.findViewById(R.id.name)).setText(MtgTraderApplication.formatCardCount(count, cardInfo));
+        ((TextView) cardView.findViewById(R.id.info)).setText(cardInfo.getVersionInfo());
+        ((TextView) cardView.findViewById(R.id.price)).setText(MtgTraderApplication.formatPrice(priceTotal));
+
+        TextView multiplierText = ((TextView) cardView.findViewById(R.id.multiplier));
+        if (CardInfo.isCash(cardInfo)) {
+            multiplierText.setText("");
+        } else {
+            multiplierText.setText(CardValueMultiplier.getClosest(multiplier).getDisplayValue());
+        }
+        theirCards.addView(cardView);
+        return priceTotal;
     }
 }

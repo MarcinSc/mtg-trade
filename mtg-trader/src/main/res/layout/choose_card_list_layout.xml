@@ -10,21 +10,21 @@
         <TextView android:layout_height="wrap_content"
                   android:layout_width="wrap_content"
                   android:id="@+id/name"
-                  android:textSize="15sp"
-                  android:textColor="#000000"
+                  android:textSize="@dimen/normal_font_size"
+                  android:textColor="@color/normal_text"
                   android:ellipsize="end"
                   android:singleLine="true"/>
         <TextView android:layout_height="wrap_content"
                   android:layout_width="wrap_content"
                   android:id="@+id/info"
-                  android:textSize="12sp"
-                  android:textColor="#666666"
+                  android:textSize="@dimen/small_font_size"
+                  android:textColor="@color/additional_text"
                   android:ellipsize="end"
                   android:singleLine="true"/>
     </LinearLayout>
     <TextView android:layout_width="wrap_content" android:layout_height="fill_parent"
               android:id="@+id/price"
-              android:textSize="15sp"
-              android:textColor="#000000"
+              android:textSize="@dimen/normal_font_size"
+              android:textColor="@color/normal_text"
               android:gravity="end|center_vertical"/>
 </LinearLayout>

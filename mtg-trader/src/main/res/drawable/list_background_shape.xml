@@ -12,6 +12,6 @@
     </stroke>
     <!-- The radius makes the corners rounded -->
     <corners
-            android:radius="2dp">
+            android:radius="@dimen/list_corner_radius">
     </corners>
 </shape>

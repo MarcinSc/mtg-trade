@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textColor="#000000"
+            android:textColor="@color/normal_text"
             android:layout_weight="1"
             android:id="@+id/display"/>
     <ImageButton

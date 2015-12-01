@@ -6,30 +6,36 @@
               android:id="@+id/priceView">
     <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
               android:id="@+id/tradeDate"
+              android:textSize="@dimen/packed_large_font_size"
               android:gravity="center"
-              android:textColor="#ffffff"
-              android:background="#000000"/>
+              android:textColor="@color/header_text"
+              android:background="@color/header_background"/>
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:orientation="horizontal" android:baselineAligned="false">
         <LinearLayout android:layout_width="fill_parent" android:layout_height="match_parent"
                       android:id="@+id/theirCards"
-                      android:paddingLeft="5dp"
-                      android:paddingRight="5dp"
+                      android:paddingLeft="@dimen/history_list_padding"
+                      android:paddingRight="@dimen/history_list_padding"
                       android:orientation="vertical" android:layout_weight="1">
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:textSize="@dimen/packed_normal_font_size"
+                      android:textColor="@color/normal_text"
                       android:text="@string/their_cards_history_label"/>
 
         </LinearLayout>
         <LinearLayout android:layout_width="fill_parent" android:layout_height="match_parent"
                       android:id="@+id/myCards"
-                      android:paddingLeft="5dp"
-                      android:paddingRight="5dp"
+                      android:paddingLeft="@dimen/history_list_padding"
+                      android:paddingRight="@dimen/history_list_padding"
                       android:orientation="vertical" android:layout_weight="1">
             <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:textSize="@dimen/packed_normal_font_size"
+                      android:textColor="@color/normal_text"
                       android:text="@string/my_cards_history_label"/>
         </LinearLayout>
     </LinearLayout>
     <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
               android:id="@+id/tradeProfit"
+              android:textSize="@dimen/packed_large_font_size"
               android:gravity="center"/>
 </LinearLayout>

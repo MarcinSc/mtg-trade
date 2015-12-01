@@ -13,6 +13,31 @@
         <item name="android:minWidth">16dip</item>
     </style>
 
-    <color name="history_label_profit">#ff0000</color>
-    <color name="history_label_loss">#00aa00</color>
+    <color name="activity_background">#dcfcfc</color>
+    <color name="history_label_profit">#00aa00</color>
+    <color name="history_label_loss">#ff0000</color>
+
+    <color name="history_separator_color">#aaaaaa</color>
+    <dimen name="history_separator_height">3dp</dimen>
+
+    <color name="warning_background">#cc0000</color>
+    <color name="header_background">#000000</color>
+
+    <color name="warning_text">#ffffff</color>
+    <color name="header_text">#ffffff</color>
+    <color name="normal_text">#000000</color>
+    <color name="additional_text">#666666</color>
+
+    <dimen name="add_card_button_size">20dp</dimen>
+    <dimen name="total_price_inset">80dp</dimen>
+    <dimen name="history_list_padding">3dp</dimen>
+
+    <!-- Font related dimensions -->
+    <dimen name="large_font_size">18sp</dimen>
+    <dimen name="normal_font_size">15sp</dimen>
+    <dimen name="small_font_size">12sp</dimen>
+
+    <dimen name="packed_large_font_size">12sp</dimen>
+    <dimen name="packed_normal_font_size">10sp</dimen>
+    <dimen name="packed_small_font_size">8sp</dimen>
 </resources>
