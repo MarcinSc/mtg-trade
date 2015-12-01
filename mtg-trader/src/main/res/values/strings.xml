@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="app_name">MTG Trader</string>
+
+    <string name="action_update_database">Update database</string>
+    <string name="action_history">Trade History</string>
+
+    <string name="title_activity_trade">MTG Trader</string>
+    <string name="title_activity_choose_card">Choose Card</string>
+    <string name="title_activity_history">Trade History</string>
+    <string name="done">Done</string>
+    <string name="delete">Delete</string>
+    <string name="decrement">Decrement</string>
+    <string name="increment">Increment</string>
+    <string name="card_search_hint">Card name or number for cash</string>
+    <string name="historical_profit">Historical profit</string>
+    <string name="outdated_database_label">Outdated price database</string>
+    <string name="add_their_card">Add their card</string>
+    <string name="their_cards_label">Their cards</string>
+    <string name="store_trade_button_label">Store trade</string>
+    <string name="add_my_card">Add my card</string>
+    <string name="my_cards_label">My cards</string>
+    <string name="their_cards_history_label">Their cards</string>
+    <string name="my_cards_history_label">My cards</string>
+    <string name="list_separator">List separator</string>
+
+    <!-- Toasts -->
+    <string name="trade_stored_toast">Trade stored</string>
+    <string name="no_trade_to_store_toast">No trade to store</string>
+</resources>

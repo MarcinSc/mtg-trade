@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:id="@+id/priceView">
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:id="@+id/tradeDate"
+              android:gravity="center"
+              android:textColor="#ffffff"
+              android:background="#000000"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:orientation="horizontal" android:baselineAligned="false">
+        <LinearLayout android:layout_width="fill_parent" android:layout_height="match_parent"
+                      android:id="@+id/theirCards"
+                      android:paddingLeft="5dp"
+                      android:paddingRight="5dp"
+                      android:orientation="vertical" android:layout_weight="1">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:text="@string/their_cards_history_label"/>
+
+        </LinearLayout>
+        <LinearLayout android:layout_width="fill_parent" android:layout_height="match_parent"
+                      android:id="@+id/myCards"
+                      android:paddingLeft="5dp"
+                      android:paddingRight="5dp"
+                      android:orientation="vertical" android:layout_weight="1">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:text="@string/my_cards_history_label"/>
+        </LinearLayout>
+    </LinearLayout>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:id="@+id/tradeProfit"
+              android:gravity="center"/>
+</LinearLayout>

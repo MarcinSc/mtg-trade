@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <declare-styleable name="SplitLayout">
+        <attr name="splitHeight" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="TitleLayout">
+        <attr name="titleHeight" format="integer"/>
+    </declare-styleable>
+    <attr name="smallPickerStyle" format="string"/>
+    <declare-styleable name="HorizontalPicker">
+        <attr name="internalLayout" format="string"/>
+        <attr name="displayWidth" format="dimension"/>
+    </declare-styleable>
+</resources>

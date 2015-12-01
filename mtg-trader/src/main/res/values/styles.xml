@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    </style>
+
+    <style name="BlackTextSpinner" parent="Base.TextAppearance.AppCompat.Widget.TextView.SpinnerItem">
+        <item name="android:background">@android:color/black</item>
+    </style>
+
+    <style name="SmallButton" parent="Base.Widget.AppCompat.Button.Small">
+        <item name="android:minHeight">16dip</item>
+        <item name="android:minWidth">16dip</item>
+    </style>
+
+    <style name="HistoryLabelProfit">
+        <item name="android:color">#ff0000</item>
+    </style>
+
+    <style name="HistoryLabelLoss">
+        <item name="android:color">#00aa00</item>
+    </style>
+</resources>
