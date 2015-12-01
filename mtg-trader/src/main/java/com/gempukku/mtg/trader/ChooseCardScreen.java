@@ -79,7 +79,7 @@ public class ChooseCardScreen extends AppCompatActivity {
                         index++;
                     }
                 } catch (NumberFormatException exp) {
-
+                    // Ignore
                 }
 
                 for (CardInfo cardInfo : _cardProvider.findCards(constraint.toString(), 10)) {

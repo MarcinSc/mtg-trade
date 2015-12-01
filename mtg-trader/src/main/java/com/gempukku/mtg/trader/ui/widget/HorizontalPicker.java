@@ -40,7 +40,7 @@ public class HorizontalPicker extends LinearLayout {
         LayoutInflater vi = LayoutInflater.from(getContext());
 
         if (getBackground() == null) {
-            setBackgroundDrawable(getResources().getDrawable(R.drawable.horizontal_picker_shape, null));
+            setBackgroundDrawable(getResources().getDrawable(R.drawable.horizontal_picker_shape));
         }
 
         vi.inflate(layoutResId, this, true);

@@ -1,7 +1,6 @@
 package com.gempukku.mtg.trader.ui;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +29,8 @@ public class TradeHistoryListAdapter extends ArrayAdapter<TradeInfo> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
 
-        LayoutInflater vi = LayoutInflater.from(getContext());
+        Context context = getContext();
+        LayoutInflater vi = LayoutInflater.from(context);
 
         if (v == null) {
             v = vi.inflate(R.layout.history_list_layout, null);
@@ -50,8 +50,8 @@ public class TradeHistoryListAdapter extends ArrayAdapter<TradeInfo> {
         if (tradeInfo != null) {
             TextView textView = (TextView) v.findViewById(R.id.tradeDate);
             Date tradeDate = new Date(tradeInfo.getDate());
-            String dateStr = DateFormat.getDateFormat(getContext()).format(tradeDate);
-            String timeStr = DateFormat.getTimeFormat(getContext()).format(tradeDate);
+            String dateStr = DateFormat.getDateFormat(context).format(tradeDate);
+            String timeStr = DateFormat.getTimeFormat(context).format(tradeDate);
             textView.setText(dateStr + " " + timeStr);
 
             int profit = 0;
@@ -100,8 +100,9 @@ public class TradeHistoryListAdapter extends ArrayAdapter<TradeInfo> {
 
             TextView tradeProfit = (TextView) v.findViewById(R.id.tradeProfit);
             tradeProfit.setText("Profit: " + MtgTraderApplication.formatPrice(profit));
-            int color = (profit < 0) ? Color.RED : Color.rgb(0, 0xaa, 0);
-            tradeProfit.setTextColor(color);
+            int lossColor = context.getResources().getColor(R.color.history_label_loss);
+            int profitColor = context.getResources().getColor(R.color.history_label_profit);
+            tradeProfit.setTextColor((profit < 0) ? lossColor : profitColor);
         }
 
         return v;
