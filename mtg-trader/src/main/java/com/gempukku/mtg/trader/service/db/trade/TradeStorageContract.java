@@ -1,4 +1,4 @@
-package com.gempukku.mtg.trader.service.db;
+package com.gempukku.mtg.trader.service.db.trade;
 
 import android.provider.BaseColumns;
 

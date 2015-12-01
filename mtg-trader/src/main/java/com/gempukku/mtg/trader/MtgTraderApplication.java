@@ -1,27 +1,33 @@
 package com.gempukku.mtg.trader;
 
 import android.app.Application;
+import android.content.Context;
+import android.text.format.DateFormat;
 import com.gempukku.mtg.trader.dao.CardInfo;
 import com.gempukku.mtg.trader.dao.CardWithCountAndMultiplier;
 import com.gempukku.mtg.trader.service.CardProvider;
 import com.gempukku.mtg.trader.service.TradeStorage;
-import com.gempukku.mtg.trader.service.db.DbTradeStorage;
-import com.gempukku.mtg.trader.service.temp.TempCardProvider;
+import com.gempukku.mtg.trader.service.db.card.DbCardProvider;
+import com.gempukku.mtg.trader.service.db.trade.DbTradeStorage;
+import com.gempukku.mtg.trader.service.temp.MemoryCardDataSource;
 
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class MtgTraderApplication extends Application {
-    private TempCardProvider _cardProvider;
+    private CardProvider _cardProvider;
     private TradeStorage _tradeStorage;
 
     public MtgTraderApplication() {
-        _cardProvider = new TempCardProvider();
-        _cardProvider.addCard(new CardInfo("sc", "Snapcaster Mage", "Innistrad", 5956));
-        _cardProvider.addCard(new CardInfo("scf", "Snapcaster Mage", "Innistrad · Foil", 18040));
-        _cardProvider.addCard(new CardInfo("ara", "Ancestral Recall", "Alpha", 500000));
-        _cardProvider.addCard(new CardInfo("arb", "Ancestral Recall", "Beta", 300000));
-        _cardProvider.addCard(new CardInfo("aru", "Ancestral Recall", "Unlimited", 50000));
+        MemoryCardDataSource cardDataSource = new MemoryCardDataSource();
+        cardDataSource.addCard(new CardInfo("sc", "Snapcaster Mage", "Innistrad", 5956));
+        cardDataSource.addCard(new CardInfo("scf", "Snapcaster Mage", "Innistrad · Foil", 18040));
+        cardDataSource.addCard(new CardInfo("ara", "Ancestral Recall", "Alpha", 500000));
+        cardDataSource.addCard(new CardInfo("arb", "Ancestral Recall", "Beta", 300000));
+        cardDataSource.addCard(new CardInfo("aru", "Ancestral Recall", "Unlimited", 50000));
+
+        _cardProvider = new DbCardProvider(this, cardDataSource);
 
         _tradeStorage = new DbTradeStorage(this);
     }
@@ -58,5 +64,12 @@ public class MtgTraderApplication extends Application {
         CardInfo cardInfo = card.getCardInfo();
         int count = card.getCount();
         return Math.round(count * cardInfo.getPrice() * card.getMultiplier());
+    }
+
+    public static String formatDate(Context context, long date) {
+        Date tradeDate = new Date(date);
+        String dateStr = DateFormat.getDateFormat(context).format(tradeDate);
+        String timeStr = DateFormat.getTimeFormat(context).format(tradeDate);
+        return dateStr + " " + timeStr;
     }
 }

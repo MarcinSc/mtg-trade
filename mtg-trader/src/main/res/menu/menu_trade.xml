@@ -7,7 +7,7 @@
           android:title="@string/action_history"
           android:orderInCategory="0"
           app:showAsAction="ifRoom"/>
-    <item android:id="@+id/action_settings"
+    <item android:id="@+id/action_update_database"
           android:title="@string/action_update_database"
           android:orderInCategory="100"
           app:showAsAction="never"/>

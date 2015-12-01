@@ -1,7 +1,6 @@
 package com.gempukku.mtg.trader.ui;
 
 import android.content.Context;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import com.gempukku.mtg.trader.dao.TradeEntry;
 import com.gempukku.mtg.trader.dao.TradeInfo;
 import com.gempukku.mtg.trader.service.CardProvider;
 
-import java.util.Date;
 import java.util.List;
 
 public class TradeHistoryListAdapter extends ArrayAdapter<TradeInfo> {
@@ -50,10 +48,7 @@ public class TradeHistoryListAdapter extends ArrayAdapter<TradeInfo> {
 
         if (tradeInfo != null) {
             TextView textView = (TextView) v.findViewById(R.id.tradeDate);
-            Date tradeDate = new Date(tradeInfo.getDate());
-            String dateStr = DateFormat.getDateFormat(context).format(tradeDate);
-            String timeStr = DateFormat.getTimeFormat(context).format(tradeDate);
-            textView.setText(dateStr + " " + timeStr);
+            textView.setText(MtgTraderApplication.formatDate(getContext(), tradeInfo.getDate()));
 
             int profit = 0;
 

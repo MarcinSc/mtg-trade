@@ -1,5 +1,7 @@
 package com.gempukku.mtg.trader;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +22,6 @@ import com.gempukku.mtg.trader.ui.CardWithPriceListAdapter;
 import com.gempukku.mtg.trader.ui.TradeModifierCallback;
 
 public class TradeScreen extends AppCompatActivity {
-    private static long OUTDATED_ALERT_THRESHOLD = 3 * 24 * 60 * 60 * 1000; // 3 days
     private static int ADD_THEIR_CARD_CODE = 1;
     private static int ADD_MINE_CARD_CODE = 2;
 
@@ -41,9 +42,7 @@ public class TradeScreen extends AppCompatActivity {
         _cardProvider = mtgTraderApplication.getCardProvider();
         _tradeStorage = mtgTraderApplication.getTradeStorage();
 
-        if (_cardProvider.getDatabaseUpdateDate() + OUTDATED_ALERT_THRESHOLD > System.currentTimeMillis()) {
-            findViewById(R.id.outdatedAlert).setVisibility(View.GONE);
-        }
+        updateDatabaseStateUI();
 
         ListView myCardsView = (ListView) findViewById(R.id.myCards);
         _mineCardList = new CardWithPriceListAdapter(
@@ -127,6 +126,18 @@ public class TradeScreen extends AppCompatActivity {
         updateTheirPrice();
     }
 
+    private void updateDatabaseStateUI() {
+        if (_cardProvider.isDatabaseOutdated()) {
+            findViewById(R.id.outdatedAlert).setVisibility(View.VISIBLE);
+            findViewById(R.id.updatedInformation).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.outdatedAlert).setVisibility(View.GONE);
+            TextView updatedInformation = (TextView) findViewById(R.id.updatedInformation);
+            updatedInformation.setText("Database updated: " + MtgTraderApplication.formatDate(this, _cardProvider.getDatabaseUpdateDate()));
+            updatedInformation.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void updateMinePrice() {
         int cardCount = _mineCardList.getCount();
         _mineValue = 0;
@@ -187,7 +198,8 @@ public class TradeScreen extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_update_database) {
+            updateDatabase();
             return true;
         } else if (id == R.id.action_trade_history) {
             Intent intent = new Intent(this, HistoryScreen.class);
@@ -197,6 +209,46 @@ public class TradeScreen extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateDatabase() {
+        final ProgressDialog ringProgressDialog = ProgressDialog.show(this, "Updating database", "Downloading database...", false, true);
+        final CardProvider.CancellableUpdate cancellableUpdate = _cardProvider.updateDatabase(
+                new CardProvider.ProgressUpdate() {
+                    @Override
+                    public void updateProgress(final int count, final int max) {
+                        runOnUiThread(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ringProgressDialog.setMax(max);
+                                        ringProgressDialog.setProgress(count);
+                                    }
+                                }
+                        );
+                    }
+                },
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ringProgressDialog.dismiss();
+                                        updateDatabaseStateUI();
+                                    }
+                                }
+                        );
+                    }
+                });
+        ringProgressDialog.setOnCancelListener(
+                new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        cancellableUpdate.cancel();
+                    }
+                });
     }
 
     @Override

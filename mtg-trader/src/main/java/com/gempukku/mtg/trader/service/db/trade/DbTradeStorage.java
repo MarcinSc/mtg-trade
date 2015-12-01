@@ -1,4 +1,4 @@
-package com.gempukku.mtg.trader.service.db;
+package com.gempukku.mtg.trader.service.db.trade;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,9 +9,6 @@ import com.gempukku.mtg.trader.service.TradeStorage;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.gempukku.mtg.trader.service.db.TradeStorageContract.TradeEntry;
-import static com.gempukku.mtg.trader.service.db.TradeStorageContract.TradeInfoEntry;
 
 public class DbTradeStorage implements TradeStorage {
     private static final int MINE_ENTRY_TYPE = 0;
@@ -27,17 +24,17 @@ public class DbTradeStorage implements TradeStorage {
     public List<TradeInfo> listTrades() {
         SQLiteDatabase db = _dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT "
-                + "i." + TradeInfoEntry._ID
-                + ", i." + TradeInfoEntry.COLUMN_NAME_DATE
-                + ", e." + TradeEntry.COLUMN_NAME_TYPE
-                + ", e." + TradeEntry.COLUMN_NAME_CARD_ID
-                + ", e." + TradeEntry.COLUMN_NAME_COUNT
-                + ", e." + TradeEntry.COLUMN_NAME_PRICE
-                + ", e." + TradeEntry.COLUMN_NAME_MULTIPLIER
+                + "i." + TradeStorageContract.TradeInfoEntry._ID
+                + ", i." + TradeStorageContract.TradeInfoEntry.COLUMN_NAME_DATE
+                + ", e." + TradeStorageContract.TradeEntry.COLUMN_NAME_TYPE
+                + ", e." + TradeStorageContract.TradeEntry.COLUMN_NAME_CARD_ID
+                + ", e." + TradeStorageContract.TradeEntry.COLUMN_NAME_COUNT
+                + ", e." + TradeStorageContract.TradeEntry.COLUMN_NAME_PRICE
+                + ", e." + TradeStorageContract.TradeEntry.COLUMN_NAME_MULTIPLIER
                 + " FROM "
-                + TradeInfoEntry.TABLE_NAME + " i INNER JOIN "
-                + TradeEntry.TABLE_NAME + " e ON i." + TradeInfoEntry._ID + "=e." + TradeEntry.COLUMN_NAME_TRADE_INFO
-                + " ORDER BY i." + TradeInfoEntry.COLUMN_NAME_DATE + " desc, e." + TradeEntry._ID + " asc", new String[0]);
+                + TradeStorageContract.TradeInfoEntry.TABLE_NAME + " i INNER JOIN "
+                + TradeStorageContract.TradeEntry.TABLE_NAME + " e ON i." + TradeStorageContract.TradeInfoEntry._ID + "=e." + TradeStorageContract.TradeEntry.COLUMN_NAME_TRADE_INFO
+                + " ORDER BY i." + TradeStorageContract.TradeInfoEntry.COLUMN_NAME_DATE + " desc, e." + TradeStorageContract.TradeEntry._ID + " asc", new String[0]);
 
         List<TradeInfo> result = new LinkedList<TradeInfo>();
         try {
@@ -76,9 +73,9 @@ public class DbTradeStorage implements TradeStorage {
         db.beginTransaction();
         try {
             ContentValues infoValues = new ContentValues();
-            infoValues.put(TradeInfoEntry.COLUMN_NAME_DATE, trade.getDate());
+            infoValues.put(TradeStorageContract.TradeInfoEntry.COLUMN_NAME_DATE, trade.getDate());
 
-            long infoId = db.insert(TradeInfoEntry.TABLE_NAME, null, infoValues);
+            long infoId = db.insert(TradeStorageContract.TradeInfoEntry.TABLE_NAME, null, infoValues);
 
             insertEntries(db, infoId, MINE_ENTRY_TYPE, trade.getMyCards());
             insertEntries(db, infoId, THEIR_ENTRY_TYPE, trade.getTheirCards());
@@ -96,8 +93,8 @@ public class DbTradeStorage implements TradeStorage {
         int mineTotal = 0;
         int theirTotal = 0;
 
-        Cursor cursor = db.query(TradeEntry.TABLE_NAME, new String[]{TradeEntry.COLUMN_NAME_TYPE, "sum(" + TradeEntry.COLUMN_NAME_PRICE + "*" + TradeEntry.COLUMN_NAME_COUNT + "*" + TradeEntry.COLUMN_NAME_MULTIPLIER + ")"},
-                null, null, TradeEntry.COLUMN_NAME_TYPE, null, null);
+        Cursor cursor = db.query(TradeStorageContract.TradeEntry.TABLE_NAME, new String[]{TradeStorageContract.TradeEntry.COLUMN_NAME_TYPE, "sum(" + TradeStorageContract.TradeEntry.COLUMN_NAME_PRICE + "*" + TradeStorageContract.TradeEntry.COLUMN_NAME_COUNT + "*" + TradeStorageContract.TradeEntry.COLUMN_NAME_MULTIPLIER + ")"},
+                null, null, TradeStorageContract.TradeEntry.COLUMN_NAME_TYPE, null, null);
         try {
             while (cursor.moveToNext()) {
                 int type = cursor.getInt(0);
