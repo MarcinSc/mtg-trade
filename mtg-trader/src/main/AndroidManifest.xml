@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.gempukku.mtg.trader">
+
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
             android:name=".MtgTraderApplication"
             android:allowBackup="true"
@@ -10,22 +12,28 @@
             android:theme="@style/AppTheme">
         <activity
                 android:name=".TradeScreen"
-                android:screenOrientation="sensorPortrait"
-                android:label="@string/app_name">
+                android:label="@string/app_name"
+                android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
                 android:name=".ChooseCardScreen"
-                android:screenOrientation="sensorPortrait"
-                android:label="@string/title_activity_choose_card">
+                android:label="@string/title_activity_choose_card"
+                android:screenOrientation="sensorPortrait">
         </activity>
         <activity
                 android:name=".HistoryScreen"
-                android:screenOrientation="sensorPortrait"
-                android:label="@string/title_activity_history">
+                android:label="@string/title_activity_history"
+                android:screenOrientation="sensorPortrait">
+        </activity>
+        <activity
+                android:name=".CardDetails"
+                android:label="@string/title_activity_card_details"
+                android:screenOrientation="sensorPortrait">
         </activity>
     </application>
 

@@ -1,6 +1,7 @@
 package com.gempukku.mtg.trader.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -10,6 +11,7 @@ import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
+import com.gempukku.mtg.trader.CardDetails;
 import com.gempukku.mtg.trader.MtgTraderApplication;
 import com.gempukku.mtg.trader.R;
 import com.gempukku.mtg.trader.dao.CardInfo;
@@ -63,6 +65,7 @@ public class CardWithPriceListAdapter extends ArrayAdapter<CardWithCountAndMulti
             v = vi.inflate(R.layout.trade_list_layout, null);
 
             final ViewSwitcher viewSwitcher = (ViewSwitcher) v.findViewById(R.id.switcher);
+            viewSwitcher.setTag(position);
             final GestureDetector gestureDetector = new GestureDetector(getContext(), new MyGestureListener(viewSwitcher));
 
             final View priceView = v.findViewById(R.id.priceView);
@@ -149,6 +152,7 @@ public class CardWithPriceListAdapter extends ArrayAdapter<CardWithCountAndMulti
             multiplierPicker.setTag(position);
 
             final ViewSwitcher viewSwitcher = (ViewSwitcher) v.findViewById(R.id.switcher);
+            viewSwitcher.setTag(position);
             switchToFirstChild(viewSwitcher);
         }
 
@@ -226,6 +230,32 @@ public class CardWithPriceListAdapter extends ArrayAdapter<CardWithCountAndMulti
         @Override
         public void onLongPress(MotionEvent e) {
             _viewSwitcher.showNext();
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            CardWithCountAndMultiplier cardWithCountAndMultiplier = getItem((Integer) _viewSwitcher.getTag());
+            CardInfo cardInfo = cardWithCountAndMultiplier.getCardInfo();
+            if (!CardInfo.isCash(cardInfo)) {
+                String cardId = cardInfo.getId();
+
+                Context context = getContext();
+                Intent openCardInfo = new Intent(context, CardDetails.class);
+                openCardInfo.putExtra(CardDetails.CARD_ID_KEY, cardId);
+
+                context.startActivity(openCardInfo);
+            }
+            return true;
         }
     }
 }

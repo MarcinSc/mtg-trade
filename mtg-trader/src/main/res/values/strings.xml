@@ -26,4 +26,8 @@
     <!-- Toasts -->
     <string name="trade_stored_toast">Trade stored</string>
     <string name="no_trade_to_store_toast">No trade to store</string>
+    <string name="title_activity_card_details">Card Details</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>

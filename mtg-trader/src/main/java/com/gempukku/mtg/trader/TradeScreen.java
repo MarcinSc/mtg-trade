@@ -51,7 +51,7 @@ public class TradeScreen extends AppCompatActivity {
                     public void tradeChanged() {
                         updateMinePrice();
                     }
-                }, getApplicationContext(), R.layout.trade_list_layout);
+                }, this, R.layout.trade_list_layout);
         myCardsView.setAdapter(_mineCardList);
 
         ListView theirCardsView = (ListView) findViewById(R.id.theirCards);
@@ -61,7 +61,7 @@ public class TradeScreen extends AppCompatActivity {
                     public void tradeChanged() {
                         updateTheirPrice();
                     }
-                }, getApplicationContext(), R.layout.trade_list_layout);
+                }, this, R.layout.trade_list_layout);
         theirCardsView.setAdapter(_theirCardList);
 
         ImageButton addTheirButton = (ImageButton) findViewById(R.id.addTheir);
@@ -90,7 +90,7 @@ public class TradeScreen extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (_mineCardList.getCount() == 0 && _theirCardList.getCount() == 0) {
-                            Toast toast = Toast.makeText(getApplicationContext(), getResources().getText(R.string.no_trade_to_store_toast), Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(TradeScreen.this, getResources().getText(R.string.no_trade_to_store_toast), Toast.LENGTH_SHORT);
                             toast.show();
                         } else {
                             TradeInfo tradeInfo = new TradeInfo(System.currentTimeMillis());
@@ -116,7 +116,7 @@ public class TradeScreen extends AppCompatActivity {
                             updateMinePrice();
                             updateTheirPrice();
 
-                            Toast toast = Toast.makeText(getApplicationContext(), getResources().getText(R.string.trade_stored_toast), Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(TradeScreen.this, getResources().getText(R.string.trade_stored_toast), Toast.LENGTH_SHORT);
                             toast.show();
                         }
                     }
@@ -247,7 +247,7 @@ public class TradeScreen extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         updateProgressDialog.dismiss();
-                                        Toast toast = Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
+                                        Toast toast = Toast.makeText(TradeScreen.this, errorMessage, Toast.LENGTH_SHORT);
                                         toast.show();
                                     }
                                 });
