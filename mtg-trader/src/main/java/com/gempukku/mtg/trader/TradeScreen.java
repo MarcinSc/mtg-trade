@@ -212,7 +212,7 @@ public class TradeScreen extends AppCompatActivity {
     }
 
     private void updateDatabase() {
-        final ProgressDialog ringProgressDialog = ProgressDialog.show(this, "Updating database", "Downloading database...", false, true);
+        final ProgressDialog updateProgressDialog = ProgressDialog.show(this, "Updating database", "Downloading database...", false, true);
         final CardProvider.CancellableUpdate cancellableUpdate = _cardProvider.updateDatabase(
                 new CardProvider.ProgressUpdate() {
                     @Override
@@ -221,28 +221,51 @@ public class TradeScreen extends AppCompatActivity {
                                 new Runnable() {
                                     @Override
                                     public void run() {
-                                        ringProgressDialog.setMax(max);
-                                        ringProgressDialog.setProgress(count);
+                                        updateProgressDialog.setMax(max);
+                                        updateProgressDialog.setProgress(count);
                                     }
                                 }
                         );
                     }
                 },
-                new Runnable() {
+                new CardProvider.UpdateResult() {
                     @Override
-                    public void run() {
+                    public void cancelled() {
                         runOnUiThread(
                                 new Runnable() {
                                     @Override
                                     public void run() {
-                                        ringProgressDialog.dismiss();
+                                        updateProgressDialog.dismiss();
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void error(final String errorMessage) {
+                        runOnUiThread(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        updateProgressDialog.dismiss();
+                                        Toast toast = Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
+                                        toast.show();
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void success() {
+                        runOnUiThread(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        updateProgressDialog.dismiss();
                                         updateDatabaseStateUI();
                                     }
-                                }
-                        );
+                                });
                     }
                 });
-        ringProgressDialog.setOnCancelListener(
+        updateProgressDialog.setOnCancelListener(
                 new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {

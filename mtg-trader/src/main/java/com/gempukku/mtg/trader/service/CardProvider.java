@@ -7,7 +7,7 @@ public interface CardProvider {
 
     boolean isDatabaseOutdated();
 
-    CancellableUpdate updateDatabase(ProgressUpdate progressUpdate, Runnable finishCallback);
+    CancellableUpdate updateDatabase(ProgressUpdate progressUpdate, UpdateResult finishCallback);
 
     Iterable<CardInfo> findCards(String text, int maxCount);
 
@@ -19,5 +19,13 @@ public interface CardProvider {
 
     interface CancellableUpdate {
         void cancel();
+    }
+
+    interface UpdateResult {
+        void error(String errorMessage);
+
+        void success();
+
+        void cancelled();
     }
 }

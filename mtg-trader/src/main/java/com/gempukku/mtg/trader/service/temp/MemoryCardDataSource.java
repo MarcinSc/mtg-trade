@@ -26,7 +26,7 @@ public class MemoryCardDataSource implements CardDataSource {
     }
 
     @Override
-    public CardProvider.CancellableUpdate updateInBackground(CardProvider.ProgressUpdate progressUpdate, CardStorage cardStorage, Runnable finishCallback) {
+    public CardProvider.CancellableUpdate updateInBackground(CardProvider.ProgressUpdate progressUpdate, CardStorage cardStorage, CardProvider.UpdateResult finishCallback) {
         final UpdateRunnable updateRunnable = new UpdateRunnable(progressUpdate, cardStorage, finishCallback);
         Thread thr = new Thread(updateRunnable);
         thr.start();
@@ -41,11 +41,11 @@ public class MemoryCardDataSource implements CardDataSource {
     private class UpdateRunnable implements Runnable {
         private CardProvider.ProgressUpdate _progressUpdate;
         private CardStorage _cardStorage;
-        private Runnable _finishCallback;
+        private CardProvider.UpdateResult _finishCallback;
 
         private volatile boolean _cancelled;
 
-        public UpdateRunnable(CardProvider.ProgressUpdate progressUpdate, CardStorage cardStorage, Runnable finishCallback) {
+        public UpdateRunnable(CardProvider.ProgressUpdate progressUpdate, CardStorage cardStorage, CardProvider.UpdateResult finishCallback) {
             _progressUpdate = progressUpdate;
             _cardStorage = cardStorage;
             _finishCallback = finishCallback;
@@ -69,6 +69,7 @@ public class MemoryCardDataSource implements CardDataSource {
                     if (_cancelled) {
                         calledFinish = true;
                         _cardStorage.finishStoring(false);
+                        _finishCallback.cancelled();
                         break;
                     }
 
@@ -79,13 +80,14 @@ public class MemoryCardDataSource implements CardDataSource {
                 if (!_cancelled) {
                     calledFinish = true;
                     _cardStorage.finishStoring(true);
+                    _finishCallback.success();
                 }
             } finally {
-                if (!calledFinish)
+                if (!calledFinish) {
                     _cardStorage.finishStoring(false);
+                    _finishCallback.error("Unknown error occured");
+                }
             }
-
-            _finishCallback.run();
         }
 
         public void cancel() {

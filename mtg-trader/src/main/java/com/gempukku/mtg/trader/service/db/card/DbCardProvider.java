@@ -64,7 +64,7 @@ public class DbCardProvider implements CardProvider {
     }
 
     @Override
-    public CancellableUpdate updateDatabase(ProgressUpdate progressUpdate, Runnable finishCallback) {
+    public CancellableUpdate updateDatabase(ProgressUpdate progressUpdate, UpdateResult finishCallback) {
         return _cardDataSource.updateInBackground(progressUpdate, new DbCardStorage(), finishCallback);
     }
 
