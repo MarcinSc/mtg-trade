@@ -2,6 +2,7 @@ package com.gempukku.mtg.trader;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +27,7 @@ public class CardDetails extends AppCompatActivity {
         View cardDetailsScreen = cardProvider.getCardDetailsScreen(this, cardId);
 
         ViewGroup rootView = (ViewGroup) findViewById(R.id.rootView);
-        rootView.addView(cardDetailsScreen);
+        rootView.addView(cardDetailsScreen, new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
     @Override
