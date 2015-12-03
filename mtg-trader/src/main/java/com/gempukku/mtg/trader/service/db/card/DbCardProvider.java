@@ -38,7 +38,7 @@ public class DbCardProvider implements CardProvider {
         SQLiteDatabase db = _dbHelper.getReadableDatabase();
         Cursor cursor = db.query(CardEntry.TABLE_NAME,
                 new String[]{CardEntry.COLUMN_CARD_ID, CardEntry.COLUMN_NAME, CardEntry.COLUMN_INFO, CardEntry.COLUMN_PRICE},
-                "instr(" + CardEntry.COLUMN_NAME + ", ?) > 0", new String[]{text}, null, null, CardEntry.COLUMN_NAME, String.valueOf(maxCount));
+                "instr(lower(" + CardEntry.COLUMN_NAME + "), ?) > 0", new String[]{text.toLowerCase()}, null, null, CardEntry.COLUMN_NAME, String.valueOf(maxCount));
         List<CardInfo> result = new LinkedList<CardInfo>();
         try {
             while (cursor.moveToNext()) {
