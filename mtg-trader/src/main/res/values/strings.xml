@@ -23,11 +23,11 @@
     <string name="my_cards_history_label">My cards</string>
     <string name="list_separator">List separator</string>
 
+    <string name="visit_tcg_player">GO TO TCGPlayer.com</string>
+
     <!-- Toasts -->
     <string name="trade_stored_toast">Trade stored</string>
     <string name="no_trade_to_store_toast">No trade to store</string>
     <string name="title_activity_card_details">Card Details</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
 </resources>

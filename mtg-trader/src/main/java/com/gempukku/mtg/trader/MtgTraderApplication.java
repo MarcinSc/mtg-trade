@@ -58,7 +58,11 @@ public class MtgTraderApplication extends Application {
         if (CardInfo.isCash(cardInfo)) {
             return "Cash";
         } else {
-            return count + "x " + cardInfo.getName();
+            if (cardInfo != null) {
+                return count + "x " + cardInfo.getName();
+            } else {
+                return count + "x Unknown card";
+            }
         }
     }
 

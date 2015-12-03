@@ -4,7 +4,7 @@ public class CardInfo {
     private static final String CASH_ID_PREFIX = "cash:";
 
     public static boolean isCash(CardInfo cardInfo) {
-        return isCash(cardInfo.getId());
+        return cardInfo != null && isCash(cardInfo.getId());
     }
 
     public static boolean isCash(String cardId) {

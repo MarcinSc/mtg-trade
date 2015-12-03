@@ -80,12 +80,13 @@ public class TradeHistoryListAdapter extends ArrayAdapter<TradeInfo> {
         float multiplier = tradeEntry.getMultiplier();
 
         CardInfo cardInfo = MtgTraderApplication.getCardInfo(cardId, _cardProvider);
+        String versionInfo = getVersionInfo(cardInfo);
 
         int priceTotal = Math.round(price * count * multiplier);
 
         View cardView = vi.inflate(R.layout.history_single_card_fragment, null);
         ((TextView) cardView.findViewById(R.id.name)).setText(MtgTraderApplication.formatCardCount(count, cardInfo));
-        ((TextView) cardView.findViewById(R.id.info)).setText(cardInfo.getVersionInfo());
+        ((TextView) cardView.findViewById(R.id.info)).setText(versionInfo);
         ((TextView) cardView.findViewById(R.id.price)).setText(MtgTraderApplication.formatPrice(priceTotal));
 
         TextView multiplierText = ((TextView) cardView.findViewById(R.id.multiplier));
@@ -96,5 +97,14 @@ public class TradeHistoryListAdapter extends ArrayAdapter<TradeInfo> {
         }
         theirCards.addView(cardView);
         return priceTotal;
+    }
+
+    private String getVersionInfo(CardInfo cardInfo) {
+        String versionInfo;
+        if (cardInfo != null)
+            versionInfo = cardInfo.getVersionInfo();
+        else
+            versionInfo = "";
+        return versionInfo;
     }
 }
