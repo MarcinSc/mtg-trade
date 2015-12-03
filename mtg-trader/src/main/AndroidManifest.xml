@@ -3,6 +3,7 @@
           package="com.gempukku.mtg.trader">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
             android:name=".MtgTraderApplication"
@@ -12,8 +13,7 @@
             android:theme="@style/AppTheme">
         <activity
                 android:name=".TradeScreen"
-                android:label="@string/app_name"
-                android:screenOrientation="sensorPortrait">
+                android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

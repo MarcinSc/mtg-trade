@@ -1,8 +1,12 @@
 package com.gempukku.mtg.trader;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -126,6 +130,82 @@ public class TradeScreen extends AppCompatActivity {
         updateTheirPrice();
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
+    public boolean isOnPaidNetwork() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null
+                && (activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE
+                || activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE_DUN);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        Bundle cardsBundle = new Bundle();
+
+        int myCardsCount = _mineCardList.getCount();
+        for (int i = 0; i < myCardsCount; i++) {
+            Bundle cardBundle = convertToCardBundle(_mineCardList.getItem(i));
+            cardsBundle.putBundle("myCard" + i, cardBundle);
+        }
+
+        int theirCardsCount = _theirCardList.getCount();
+        for (int i = 0; i < theirCardsCount; i++) {
+            Bundle cardBundle = convertToCardBundle(_theirCardList.getItem(i));
+            cardsBundle.putBundle("theirCard" + i, cardBundle);
+        }
+
+        outState.putBundle("cards", cardsBundle);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        Bundle cardsBundle = savedInstanceState.getBundle("cards");
+        int index = 0;
+        while (true) {
+            Bundle cardBundle = cardsBundle.getBundle("myCard" + index);
+            if (cardBundle == null)
+                break;
+            convertToCardAndAddToList(cardBundle, _mineCardList);
+            index++;
+        }
+        index = 0;
+        while (true) {
+            Bundle cardBundle = cardsBundle.getBundle("theirCard" + index);
+            if (cardBundle == null)
+                break;
+            convertToCardAndAddToList(cardBundle, _theirCardList);
+            index++;
+        }
+
+        updateMinePrice();
+        updateTheirPrice();
+    }
+
+    private void convertToCardAndAddToList(Bundle cardBundle, CardWithPriceListAdapter list) {
+        list.addCard(MtgTraderApplication.getCardInfo(cardBundle.getString("cardId"), _cardProvider),
+                cardBundle.getInt("count"), cardBundle.getFloat("multiplier"));
+    }
+
+    private Bundle convertToCardBundle(CardWithCountAndMultiplier item) {
+        Bundle cardBundle = new Bundle();
+        cardBundle.putString("cardId", item.getCardInfo().getId());
+        cardBundle.putInt("count", item.getCount());
+        cardBundle.putFloat("multiplier", item.getMultiplier());
+        return cardBundle;
+    }
+
     private void updateDatabaseStateUI() {
         if (_cardProvider.isDatabaseOutdated()) {
             findViewById(R.id.outdatedAlert).setVisibility(View.VISIBLE);
@@ -212,6 +292,30 @@ public class TradeScreen extends AppCompatActivity {
     }
 
     private void updateDatabase() {
+        if (!isNetworkAvailable()) {
+            Toast toast = Toast.makeText(this, "There is no network connection available", Toast.LENGTH_SHORT);
+            toast.show();
+        } else {
+            if (isOnPaidNetwork()) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Paid network")
+                        .setMessage("Updating database on your network might incur heavy cost, are you sure you want to" +
+                                "continue?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                doDatabaseUpdate();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
+            } else {
+                doDatabaseUpdate();
+            }
+        }
+    }
+
+    private void doDatabaseUpdate() {
         final ProgressDialog updateProgressDialog = ProgressDialog.show(this, "Updating database", "Downloading database...", false, true);
         final CardProvider.CancellableUpdate cancellableUpdate = _cardProvider.updateDatabase(
                 new CardProvider.ProgressUpdate() {
