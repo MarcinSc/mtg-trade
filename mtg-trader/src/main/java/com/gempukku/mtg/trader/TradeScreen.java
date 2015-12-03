@@ -5,10 +5,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -206,16 +208,48 @@ public class TradeScreen extends AppCompatActivity {
         return cardBundle;
     }
 
+    private int getScreenOrientation() {
+        Display getOrient = getWindowManager().getDefaultDisplay();
+        int orientation;
+        if (getOrient.getWidth() == getOrient.getHeight()) {
+            orientation = Configuration.ORIENTATION_SQUARE;
+        } else {
+            if (getOrient.getWidth() < getOrient.getHeight()) {
+                orientation = Configuration.ORIENTATION_PORTRAIT;
+            } else {
+                orientation = Configuration.ORIENTATION_LANDSCAPE;
+            }
+        }
+        return orientation;
+    }
+
     private void updateDatabaseStateUI() {
-        if (_cardProvider.isDatabaseOutdated()) {
-            findViewById(R.id.outdatedAlert).setVisibility(View.VISIBLE);
+        if (_cardProvider.isDatabaseOutdated() || true) {
+            TextView outdatedAlert = (TextView) findViewById(R.id.outdatedAlert);
+            String text = getOutdatedAlertText();
+            outdatedAlert.setText(text);
+            outdatedAlert.setVisibility(View.VISIBLE);
             findViewById(R.id.updatedInformation).setVisibility(View.GONE);
         } else {
             findViewById(R.id.outdatedAlert).setVisibility(View.GONE);
             TextView updatedInformation = (TextView) findViewById(R.id.updatedInformation);
-            updatedInformation.setText("Database updated: " + MtgTraderApplication.formatDate(this, _cardProvider.getDatabaseUpdateDate()));
+            updatedInformation.setText(getUpdatedDatabaseText());
             updatedInformation.setVisibility(View.VISIBLE);
         }
+    }
+
+    public String getOutdatedAlertText() {
+        if (getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE)
+            return getResources().getString(R.string.outdated_database_label_landscape);
+        else
+            return getResources().getString(R.string.outdated_database_label);
+    }
+
+    private String getUpdatedDatabaseText() {
+        if (getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE)
+            return "Database updated:\n" + MtgTraderApplication.formatDate(this, _cardProvider.getDatabaseUpdateDate());
+        else
+            return "Database updated: " + MtgTraderApplication.formatDate(this, _cardProvider.getDatabaseUpdateDate());
     }
 
     private void updateMinePrice() {

@@ -19,13 +19,14 @@
                       android:textSize="@dimen/small_font_size"
                       android:background="@color/warning_background"
                       android:textColor="@color/warning_text"
-                      android:lines="2"
-                      android:text="@string/outdated_database_label"/>
+                      android:padding="@dimen/warning_padding"
+                      android:lines="2"/>
             <TextView android:layout_width="wrap_content" android:layout_height="fill_parent"
                       android:id="@+id/updatedInformation"
                       android:textSize="@dimen/small_font_size"
                       android:background="@color/info_background"
                       android:textColor="@color/info_text"
+                      android:padding="@dimen/info_padding"
                       android:lines="2"/>
         </LinearLayout>
         <TextView

@@ -22,18 +22,15 @@
         </activity>
         <activity
                 android:name=".ChooseCardScreen"
-                android:label="@string/title_activity_choose_card"
-                android:screenOrientation="sensorPortrait">
+                android:label="@string/title_activity_choose_card">
         </activity>
         <activity
                 android:name=".HistoryScreen"
-                android:label="@string/title_activity_history"
-                android:screenOrientation="sensorPortrait">
+                android:label="@string/title_activity_history">
         </activity>
         <activity
                 android:name=".CardDetails"
-                android:label="@string/title_activity_card_details"
-                android:screenOrientation="sensorPortrait">
+                android:label="@string/title_activity_card_details">
         </activity>
     </application>
 

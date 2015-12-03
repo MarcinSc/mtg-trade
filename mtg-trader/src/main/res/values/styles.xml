@@ -16,6 +16,9 @@
     <color name="history_separator_color">#aaaaaa</color>
     <dimen name="history_separator_height">3dp</dimen>
 
+    <dimen name="warning_padding">2dp</dimen>
+    <dimen name="info_padding">2dp</dimen>
+
     <color name="warning_background">#cc0000</color>
     <color name="info_background">#00cc00</color>
     <color name="header_background">#000000</color>

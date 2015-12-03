@@ -14,6 +14,7 @@
     <string name="increment">Increment</string>
     <string name="card_search_hint">Card name or number for cash</string>
     <string name="outdated_database_label">Outdated price database</string>
+    <string name="outdated_database_label_landscape">Outdated price\ndatabase</string>
     <string name="add_their_card">Add their card</string>
     <string name="their_cards_label">Their cards</string>
     <string name="store_trade_button_label">Store trade</string>
