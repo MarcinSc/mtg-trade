@@ -20,13 +20,6 @@ public class MtgTraderApplication extends Application {
     private TradeStorage _tradeStorage;
 
     public MtgTraderApplication() {
-//        MemoryCardDataSource cardDataSource = new MemoryCardDataSource();
-//        cardDataSource.addCard(new CardInfo("sc", "Snapcaster Mage", "Innistrad", 5956));
-//        cardDataSource.addCard(new CardInfo("scf", "Snapcaster Mage", "Innistrad · Foil", 18040));
-//        cardDataSource.addCard(new CardInfo("ara", "Ancestral Recall", "Alpha", 500000));
-//        cardDataSource.addCard(new CardInfo("arb", "Ancestral Recall", "Beta", 300000));
-//        cardDataSource.addCard(new CardInfo("aru", "Ancestral Recall", "Unlimited", 50000));
-
         GempProxyCardDataSource cardDataSource = new GempProxyCardDataSource();
 
         _cardProvider = new DbCardProvider(this, cardDataSource);
