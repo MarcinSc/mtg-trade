@@ -18,6 +18,7 @@ import com.gempukku.mtg.trader.service.CardProvider;
 import com.gempukku.mtg.trader.service.db.card.CardProviderContract.CardEntry;
 import com.gempukku.mtg.trader.service.db.card.CardProviderContract.InfoEntry;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,6 +36,8 @@ public class DbCardProvider implements CardProvider {
 
     @Override
     public Iterable<CardInfo> findCards(String text, int maxCount) {
+        if (text.trim().length() == 0)
+            return Collections.emptyList();
         SQLiteDatabase db = _dbHelper.getReadableDatabase();
         Cursor cursor = db.query(CardEntry.TABLE_NAME,
                 new String[]{CardEntry.COLUMN_CARD_ID, CardEntry.COLUMN_NAME, CardEntry.COLUMN_INFO, CardEntry.COLUMN_PRICE},
