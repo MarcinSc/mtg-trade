@@ -113,7 +113,6 @@ public class DbCardProvider implements CardProvider {
         priceView.setText(MtgTraderApplication.formatPrice(cardInfo.getPrice()));
 
         View goToSiteButton = rootView.findViewById(R.id.goToSite);
-        // Temporarily get fixed link
         final String link = cardInfo.getLink();
         if (link != null) {
             goToSiteButton.setOnClickListener(
