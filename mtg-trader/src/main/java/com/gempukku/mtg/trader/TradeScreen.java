@@ -256,10 +256,11 @@ public class TradeScreen extends AppCompatActivity {
     }
 
     private String getUpdatedDatabaseText() {
-        if (getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE)
-            return "Database updated:\n" + MtgTraderApplication.formatDate(this, _cardProvider.getDatabaseUpdateDate());
-        else
-            return "Database updated: " + MtgTraderApplication.formatDate(this, _cardProvider.getDatabaseUpdateDate());
+        String databaseUpdatedPrefix = getResources().getString(R.string.database_updated_prefix);
+        if (getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
+            return databaseUpdatedPrefix + "\n" + MtgTraderApplication.formatDate(this, _cardProvider.getDatabaseUpdateDate());
+        } else
+            return databaseUpdatedPrefix + " " + MtgTraderApplication.formatDate(this, _cardProvider.getDatabaseUpdateDate());
     }
 
     private void updateMinePrice() {

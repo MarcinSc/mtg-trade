@@ -13,6 +13,7 @@
     <string name="decrement">Decrement</string>
     <string name="increment">Increment</string>
     <string name="card_search_hint">Card name or number for cash</string>
+    <string name="database_updated_prefix">Database updated:</string>
     <string name="no_database_label">No database downloaded</string>
     <string name="no_database_label_landscape">No database\ndownloaded</string>
     <string name="outdated_database_label">Outdated price database</string>
