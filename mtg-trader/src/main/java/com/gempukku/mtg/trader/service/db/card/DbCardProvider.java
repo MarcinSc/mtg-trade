@@ -77,7 +77,7 @@ public class DbCardProvider implements CardProvider {
 
     @Override
     public CancellableUpdate updateDatabase(ProgressUpdate progressUpdate, UpdateResult finishCallback) {
-        return _cardDataSource.updateInBackground(progressUpdate, new DbCardStorage(), finishCallback);
+        return _cardDataSource.updateInBackground(new DbCardStorage(progressUpdate, finishCallback));
     }
 
     @Override
@@ -137,14 +137,28 @@ public class DbCardProvider implements CardProvider {
     }
 
     private class DbCardStorage implements CardDataSource.CardStorage {
+        private ProgressUpdate _progressUpdate;
+        private UpdateResult _updateResult;
+
         private SQLiteDatabase _db;
+        private boolean _startedTransaction;
+        private int _storedCount;
+        private int _maxCount;
+
+        public DbCardStorage(ProgressUpdate progressUpdate, UpdateResult updateResult) {
+            _progressUpdate = progressUpdate;
+            _updateResult = updateResult;
+        }
 
         @Override
-        public void startStoring() {
+        public void startStoring(int max) {
             _db = _dbHelper.getWritableDatabase();
             _db.beginTransaction();
+            _startedTransaction = true;
 
             _db.delete(CardEntry.TABLE_NAME, null, null);
+            _maxCount = max;
+            _progressUpdate.updateProgress(0, _maxCount);
         }
 
         @Override
@@ -156,20 +170,46 @@ public class DbCardProvider implements CardProvider {
             contentValues.put(CardEntry.COLUMN_PRICE, cardInfo.getPrice());
 
             _db.insert(CardEntry.TABLE_NAME, null, contentValues);
+            _storedCount++;
+            _progressUpdate.updateProgress(_storedCount, _maxCount);
         }
 
         @Override
-        public void finishStoring(boolean success) {
+        public void cancelled() {
             try {
-                if (success) {
+                if (_startedTransaction) {
+                    _db.endTransaction();
+                }
+            } finally {
+                _updateResult.cancelled();
+            }
+        }
+
+        @Override
+        public void finishStoring() {
+            try {
+                try {
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(InfoEntry.COLUMN_VALUE, System.currentTimeMillis());
                     _db.update(InfoEntry.TABLE_NAME, contentValues, InfoEntry.COLUMN_KEY + "=?", new String[]{"update_date"});
 
                     _db.setTransactionSuccessful();
+                } finally {
+                    _db.endTransaction();
                 }
             } finally {
-                _db.endTransaction();
+                _updateResult.success();
+            }
+        }
+
+        @Override
+        public void error(String message) {
+            try {
+                if (_startedTransaction) {
+                    _db.endTransaction();
+                }
+            } finally {
+                _updateResult.error(message);
             }
         }
     }

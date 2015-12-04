@@ -26,8 +26,8 @@ public class MemoryCardDataSource implements CardDataSource {
     }
 
     @Override
-    public CardProvider.CancellableUpdate updateInBackground(CardProvider.ProgressUpdate progressUpdate, CardStorage cardStorage, CardProvider.UpdateResult finishCallback) {
-        final UpdateRunnable updateRunnable = new UpdateRunnable(progressUpdate, cardStorage, finishCallback);
+    public CardProvider.CancellableUpdate updateInBackground(CardStorage cardStorage) {
+        final UpdateRunnable updateRunnable = new UpdateRunnable(cardStorage);
         Thread thr = new Thread(updateRunnable);
         thr.start();
         return new CardProvider.CancellableUpdate() {
@@ -39,27 +39,21 @@ public class MemoryCardDataSource implements CardDataSource {
     }
 
     private class UpdateRunnable implements Runnable {
-        private CardProvider.ProgressUpdate _progressUpdate;
         private CardStorage _cardStorage;
-        private CardProvider.UpdateResult _finishCallback;
 
         private volatile boolean _cancelled;
 
-        public UpdateRunnable(CardProvider.ProgressUpdate progressUpdate, CardStorage cardStorage, CardProvider.UpdateResult finishCallback) {
-            _progressUpdate = progressUpdate;
+        public UpdateRunnable(CardStorage cardStorage) {
             _cardStorage = cardStorage;
-            _finishCallback = finishCallback;
         }
 
         @Override
         public void run() {
             int max = _cards.size();
 
-            _cardStorage.startStoring();
-            boolean calledFinish = false;
+            _cardStorage.startStoring(max);
+            boolean finishedWithoutError = false;
             try {
-                _progressUpdate.updateProgress(0, max);
-                int count = 0;
                 for (CardInfo card : _cards) {
                     try {
                         Thread.sleep(500);
@@ -67,25 +61,20 @@ public class MemoryCardDataSource implements CardDataSource {
 
                     }
                     if (_cancelled) {
-                        calledFinish = true;
-                        _cardStorage.finishStoring(false);
-                        _finishCallback.cancelled();
+                        finishedWithoutError = true;
+                        _cardStorage.cancelled();
                         break;
                     }
 
                     _cardStorage.storeCard(card);
-                    count++;
-                    _progressUpdate.updateProgress(count, max);
                 }
                 if (!_cancelled) {
-                    calledFinish = true;
-                    _cardStorage.finishStoring(true);
-                    _finishCallback.success();
+                    finishedWithoutError = true;
+                    _cardStorage.finishStoring();
                 }
             } finally {
-                if (!calledFinish) {
-                    _cardStorage.finishStoring(false);
-                    _finishCallback.error("Unknown error occured");
+                if (!finishedWithoutError) {
+                    _cardStorage.error("Unknown error occured");
                 }
             }
         }

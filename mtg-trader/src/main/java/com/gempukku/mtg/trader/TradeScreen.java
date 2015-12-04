@@ -224,7 +224,7 @@ public class TradeScreen extends AppCompatActivity {
     }
 
     private void updateDatabaseStateUI() {
-        if (_cardProvider.isDatabaseOutdated() || true) {
+        if (_cardProvider.isDatabaseOutdated()) {
             TextView outdatedAlert = (TextView) findViewById(R.id.outdatedAlert);
             String text = getOutdatedAlertText();
             outdatedAlert.setText(text);
@@ -333,7 +333,7 @@ public class TradeScreen extends AppCompatActivity {
             if (isOnPaidNetwork()) {
                 new AlertDialog.Builder(this)
                         .setTitle("Paid network")
-                        .setMessage("Updating database on your network might incur heavy cost, are you sure you want to" +
+                        .setMessage("Updating database on your network might incur heavy cost, are you sure you want to " +
                                 "continue?")
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {

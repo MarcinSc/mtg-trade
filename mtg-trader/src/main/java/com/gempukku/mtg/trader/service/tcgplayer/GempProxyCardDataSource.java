@@ -13,8 +13,8 @@ import java.net.URL;
 
 public class GempProxyCardDataSource implements CardDataSource {
     @Override
-    public CardProvider.CancellableUpdate updateInBackground(CardProvider.ProgressUpdate progressUpdate, CardStorage cardStorage, CardProvider.UpdateResult finishCallback) {
-        final UpdateRunnable updateRunnable = new UpdateRunnable(progressUpdate, cardStorage, finishCallback);
+    public CardProvider.CancellableUpdate updateInBackground(CardStorage cardStorage) {
+        final UpdateRunnable updateRunnable = new UpdateRunnable(cardStorage);
         Thread thr = new Thread(updateRunnable);
         thr.start();
         return new CardProvider.CancellableUpdate() {
@@ -26,22 +26,17 @@ public class GempProxyCardDataSource implements CardDataSource {
     }
 
     private class UpdateRunnable implements Runnable {
-        private CardProvider.ProgressUpdate _progressUpdate;
         private CardStorage _cardStorage;
-        private CardProvider.UpdateResult _finishCallback;
 
         private volatile boolean _cancelled;
 
-        public UpdateRunnable(CardProvider.ProgressUpdate progressUpdate, CardStorage cardStorage, CardProvider.UpdateResult finishCallback) {
-            _progressUpdate = progressUpdate;
+        public UpdateRunnable(CardStorage cardStorage) {
             _cardStorage = cardStorage;
-            _finishCallback = finishCallback;
         }
 
         @Override
         public void run() {
-            boolean startedStoring = false;
-            boolean finishedStoring = false;
+            boolean finishedWithoutError = false;
             try {
                 URL url = new URL("http://www.gempukku.com/mtg-cards/database.json");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -51,7 +46,7 @@ public class GempProxyCardDataSource implements CardDataSource {
                     // expect HTTP 200 OK, so we don't mistakenly save error report
                     // instead of the file
                     if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                        _finishCallback.error("Error communicating with the server, try again later");
+                        _cardStorage.error("Error communicating with the server, try again later");
                         return;
                     }
 
@@ -64,19 +59,16 @@ public class GempProxyCardDataSource implements CardDataSource {
                     try {
                         JsonReader reader = new JsonReader(new InputStreamReader(input, "UTF-8"));
                         try {
-                            startedStoring = true;
-                            _cardStorage.startStoring();
+                            _cardStorage.startStoring(Integer.MAX_VALUE);
                             readCardArray(reader);
+
+                            finishedWithoutError = true;
                             if (!_cancelled) {
                                 // Got through without errors and was not cancelled
-                                finishedStoring = true;
-                                _cardStorage.finishStoring(true);
-                                _finishCallback.success();
+                                _cardStorage.finishStoring();
                             } else {
                                 // Got through without errors, but was cancelled
-                                finishedStoring = true;
-                                _cardStorage.finishStoring(false);
-                                _finishCallback.cancelled();
+                                _cardStorage.cancelled();
                             }
                         } finally {
                             reader.close();
@@ -89,21 +81,10 @@ public class GempProxyCardDataSource implements CardDataSource {
                 }
 
             } catch (IOException exp) {
-                if (startedStoring) {
-                    // Error in communicating
-                    finishedStoring = true;
-                    _cardStorage.finishStoring(false);
-                    _finishCallback.error("Error while communicating with the server, try again later");
-                }
+                _cardStorage.error("Error while communicating with the server, try again later");
             } finally {
-                if (startedStoring && !finishedStoring) {
-                    // Some other error and started storing
-                    _cardStorage.finishStoring(false);
-                    _finishCallback.error("Unknown error occured, try again later");
-                }
-                if (!startedStoring) {
-                    // Some other error and has not even started storing
-                    _finishCallback.error("Unknown error occured, try again later");
+                if (!finishedWithoutError) {
+                    _cardStorage.error("Unknown error occured, try again later");
                 }
             }
         }
