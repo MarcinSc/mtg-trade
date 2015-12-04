@@ -239,10 +239,20 @@ public class TradeScreen extends AppCompatActivity {
     }
 
     public String getOutdatedAlertText() {
-        if (getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE)
-            return getResources().getString(R.string.outdated_database_label_landscape);
-        else
-            return getResources().getString(R.string.outdated_database_label);
+        boolean noDatabase = (_cardProvider.getDatabaseUpdateDate() == 0);
+        if (getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
+            if (noDatabase) {
+                return getResources().getString(R.string.no_database_label_landscape);
+            } else {
+                return getResources().getString(R.string.outdated_database_label_landscape);
+            }
+        } else {
+            if (noDatabase) {
+                return getResources().getString(R.string.no_database_label);
+            } else {
+                return getResources().getString(R.string.outdated_database_label);
+            }
+        }
     }
 
     private String getUpdatedDatabaseText() {
