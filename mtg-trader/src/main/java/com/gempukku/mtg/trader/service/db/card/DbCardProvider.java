@@ -114,7 +114,7 @@ public class DbCardProvider implements CardProvider {
 
         View goToSiteButton = rootView.findViewById(R.id.goToSite);
         // Temporarily get fixed link
-        final String link = "http://shop.tcgplayer.com/magic/innistrad/snapcaster-mage";//cardInfo.getLink();
+        final String link = cardInfo.getLink();
         if (link != null) {
             goToSiteButton.setOnClickListener(
                     new View.OnClickListener() {
