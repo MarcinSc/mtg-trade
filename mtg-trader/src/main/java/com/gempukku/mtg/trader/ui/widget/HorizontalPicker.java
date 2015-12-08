@@ -1,7 +1,9 @@
 package com.gempukku.mtg.trader.ui.widget;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,12 +24,26 @@ public class HorizontalPicker extends LinearLayout {
 
     private TextView _textView;
 
+    public HorizontalPicker(Context context) {
+        this(context, null);
+    }
+
     public HorizontalPicker(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.smallPickerStyle);
+        this(context, attrs, R.styleable.HorizontalPicker_pickerStyle);
     }
 
     public HorizontalPicker(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init(context, attrs, defStyleAttr);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public HorizontalPicker(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init(context, attrs, defStyleAttr);
+    }
+
+    private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         setOrientation(LinearLayout.HORIZONTAL);
 
         // process style attributes
@@ -64,7 +80,7 @@ public class HorizontalPicker extends LinearLayout {
         _textView = (TextView) findViewById(R.id.display);
         _textView.setText(String.valueOf(0));
 
-        int dimension = attributesArray.getDimensionPixelSize(R.styleable.HorizontalPicker_displayWidth, 0);
+        int dimension = attributesArray.getDimensionPixelSize(R.styleable.HorizontalPicker_aDisplayWidth, 0);
         _textView.setWidth(dimension);
 
         View rightButton = findViewById(R.id.rightButton);

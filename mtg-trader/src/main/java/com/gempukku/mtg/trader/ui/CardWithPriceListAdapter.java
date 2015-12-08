@@ -17,7 +17,7 @@ import com.gempukku.mtg.trader.R;
 import com.gempukku.mtg.trader.dao.CardInfo;
 import com.gempukku.mtg.trader.dao.CardValueMultiplier;
 import com.gempukku.mtg.trader.dao.CardWithCountAndMultiplier;
-import com.gempukku.mtg.trader.ui.widget.HorizontalPicker;
+import com.gempukku.mtg.trader.ui.widget.HorizontalScroller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,13 +98,13 @@ public class CardWithPriceListAdapter extends ArrayAdapter<CardWithCountAndMulti
                         }
                     });
 
-            HorizontalPicker countPicker = (HorizontalPicker) v.findViewById(R.id.count);
+            HorizontalScroller countPicker = (HorizontalScroller) v.findViewById(R.id.count);
             countPicker.setTag(position);
             final View finalV = v;
             countPicker.setOnValueChangedListener(
-                    new HorizontalPicker.OnValueChangeListener() {
+                    new HorizontalScroller.OnValueChangeListener() {
                         @Override
-                        public void onValueChange(HorizontalPicker picker, int oldVal, int newVal) {
+                        public void onValueChange(HorizontalScroller picker, int oldVal, int newVal) {
                             CardWithCountAndMultiplier cardWithCountAndMultiplier = getItem((Integer) picker.getTag());
                             cardWithCountAndMultiplier.setCount(newVal);
                             _tradeModifierCallback.tradeChanged();
@@ -117,12 +117,12 @@ public class CardWithPriceListAdapter extends ArrayAdapter<CardWithCountAndMulti
             countPicker.setMinValue(1);
             countPicker.setMaxValue(100);
 
-            HorizontalPicker multiplierPicker = (HorizontalPicker) v.findViewById(R.id.multiplierPicker);
+            HorizontalScroller multiplierPicker = (HorizontalScroller) v.findViewById(R.id.multiplierPicker);
             multiplierPicker.setTag(position);
             multiplierPicker.setOnValueChangedListener(
-                    new HorizontalPicker.OnValueChangeListener() {
+                    new HorizontalScroller.OnValueChangeListener() {
                         @Override
-                        public void onValueChange(HorizontalPicker picker, int oldVal, int newVal) {
+                        public void onValueChange(HorizontalScroller picker, int oldVal, int newVal) {
                             CardWithCountAndMultiplier cardWithCountAndMultiplier = getItem((Integer) picker.getTag());
                             cardWithCountAndMultiplier.setMultiplier(CardValueMultiplier.MULTIPLIERS.get(newVal).getMultiplier());
                             _tradeModifierCallback.tradeChanged();
@@ -132,7 +132,7 @@ public class CardWithPriceListAdapter extends ArrayAdapter<CardWithCountAndMulti
             );
 
             multiplierPicker.setFormatter(
-                    new HorizontalPicker.Formatter() {
+                    new HorizontalScroller.Formatter() {
                         @Override
                         public String format(int value) {
                             return DISPLAYED_MULTIPLIER_VALUES[value];
@@ -192,8 +192,8 @@ public class CardWithPriceListAdapter extends ArrayAdapter<CardWithCountAndMulti
         TextView priceText = (TextView) v.findViewById(R.id.price);
         TextView multiplierText = (TextView) v.findViewById(R.id.multiplier);
 
-        HorizontalPicker countPicker = (HorizontalPicker) v.findViewById(R.id.count);
-        HorizontalPicker multiplierPicker = (HorizontalPicker) v.findViewById(R.id.multiplierPicker);
+        HorizontalScroller countPicker = (HorizontalScroller) v.findViewById(R.id.count);
+        HorizontalScroller multiplierPicker = (HorizontalScroller) v.findViewById(R.id.multiplierPicker);
 
         CardInfo cardInfo = cardWithCountAndMultiplier.getCardInfo();
 

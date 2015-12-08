@@ -6,9 +6,18 @@
     <declare-styleable name="TitleLayout">
         <attr name="titleHeight" format="integer"/>
     </declare-styleable>
-    <attr name="smallPickerStyle" format="string"/>
+
     <declare-styleable name="HorizontalPicker">
+        <attr name="aDisplayWidth" format="dimension"/>
+        <attr name="pickerStyle" format="string"/>
         <attr name="internalLayout" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="HorizontalScroller">
         <attr name="displayWidth" format="dimension"/>
+        <attr name="scrollerStyle" format="string"/>
+        <attr name="textFont" format="string"/>
+        <attr name="textSize" format="dimension"/>
+        <attr name="textColor" format="color"/>
     </declare-styleable>
 </resources>
