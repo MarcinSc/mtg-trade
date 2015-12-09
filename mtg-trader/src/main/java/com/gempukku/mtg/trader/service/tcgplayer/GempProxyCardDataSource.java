@@ -50,17 +50,13 @@ public class GempProxyCardDataSource implements CardDataSource {
                         return;
                     }
 
-                    // this will be useful to display download percentage
-                    // might be -1: server did not report the length
-                    int fileLength = connection.getContentLength();
-
                     // download the file
                     InputStream input = connection.getInputStream();
                     try {
                         JsonReader reader = new JsonReader(new InputStreamReader(input, "UTF-8"));
                         try {
                             _cardStorage.startStoring(Integer.MAX_VALUE);
-                            readCardArray(reader);
+                            readSetArray(reader);
 
                             finishedWithoutError = true;
                             if (!_cancelled) {
@@ -89,19 +85,34 @@ public class GempProxyCardDataSource implements CardDataSource {
             }
         }
 
-        private void readCardArray(JsonReader reader) throws IOException {
+        private void readSetArray(JsonReader reader) throws IOException {
             reader.beginArray();
             while (reader.hasNext() && !_cancelled) {
-                CardInfo cardInfo = readCard(reader);
+                reader.beginObject();
+                // First attribute should be "name"
+                String fieldName = reader.nextName();
+                String info = reader.nextString();
+
+                // Second attribute should be "cards"
+                String nextFieldName = reader.nextName();
+                readCardArray(reader, info);
+                reader.endObject();
+            }
+            reader.endArray();
+        }
+
+        private void readCardArray(JsonReader reader, String info) throws IOException {
+            reader.beginArray();
+            while (reader.hasNext() && !_cancelled) {
+                CardInfo cardInfo = readCard(reader, info);
                 _cardStorage.storeCard(cardInfo);
             }
             reader.endArray();
         }
 
-        private CardInfo readCard(JsonReader reader) throws IOException {
+        private CardInfo readCard(JsonReader reader, String info) throws IOException {
             String id = null;
             String name = null;
-            String info = null;
             int price = 0;
 
             reader.beginObject();
@@ -111,9 +122,7 @@ public class GempProxyCardDataSource implements CardDataSource {
                     id = reader.nextString();
                 } else if (fieldName.equals("name")) {
                     name = reader.nextString();
-                } else if (fieldName.equals("info")) {
-                    info = reader.nextString();
-                } else if (fieldName.equals("midPrice")) {
+                } else if (fieldName.equals("price")) {
                     price = reader.nextInt();
                 } else {
                     reader.skipValue();
