@@ -80,7 +80,7 @@ public class HorizontalPicker extends LinearLayout {
         _textView = (TextView) findViewById(R.id.display);
         _textView.setText(String.valueOf(0));
 
-        int dimension = attributesArray.getDimensionPixelSize(R.styleable.HorizontalPicker_aDisplayWidth, 0);
+        int dimension = attributesArray.getDimensionPixelSize(R.styleable.HorizontalPicker_displayWidth, 0);
         _textView.setWidth(dimension);
 
         View rightButton = findViewById(R.id.rightButton);

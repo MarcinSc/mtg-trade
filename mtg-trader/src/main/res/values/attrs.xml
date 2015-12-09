@@ -8,13 +8,13 @@
     </declare-styleable>
 
     <declare-styleable name="HorizontalPicker">
-        <attr name="aDisplayWidth" format="dimension"/>
+        <attr name="displayWidth" format="dimension"/>
         <attr name="pickerStyle" format="string"/>
         <attr name="internalLayout" format="string"/>
     </declare-styleable>
 
     <declare-styleable name="HorizontalScroller">
-        <attr name="displayWidth" format="dimension"/>
+        <attr name="displayWidth"/>
         <attr name="scrollerStyle" format="string"/>
         <attr name="textFont" format="string"/>
         <attr name="textSize" format="dimension"/>
