@@ -8,8 +8,10 @@ public final class TradeStorageContract {
 
     public static final String SQL_CREATE_TRADE_INFO =
             "CREATE TABLE " + TradeInfoEntry.TABLE_NAME + " (" +
-                    TradeInfoEntry._ID + " INTEGER PRIMARY KEY" + COMMA_SEP +
-                    TradeInfoEntry.COLUMN_NAME_DATE + " INTEGER" +
+                    TradeInfoEntry._ID + " INTEGER PRIMARY KEY" +
+                    COMMA_SEP + TradeInfoEntry.COLUMN_NAME_DATE + " INTEGER" +
+                    COMMA_SEP + TradeInfoEntry.COLUMN_NAME_PROVIDER_ID + TEXT_TYPE +
+                    COMMA_SEP + TradeInfoEntry.COLUMN_NAME_PROVIDER_NAME + TEXT_TYPE +
                     " )";
     public static final String SQL_CREATE_TRADE_ENTRY =
             "CREATE TABLE " + TradeEntry.TABLE_NAME + " (" +
@@ -29,6 +31,8 @@ public final class TradeStorageContract {
     public static abstract class TradeInfoEntry implements BaseColumns {
         public static final String TABLE_NAME = "tradeInfo";
         public static final String COLUMN_NAME_DATE = "tradeDate";
+        public static final String COLUMN_NAME_PROVIDER_ID = "providerId";
+        public static final String COLUMN_NAME_PROVIDER_NAME = "providerName";
     }
 
     public static abstract class TradeEntry implements BaseColumns {

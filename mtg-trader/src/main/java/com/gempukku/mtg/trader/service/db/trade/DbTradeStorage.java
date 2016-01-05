@@ -26,6 +26,8 @@ public class DbTradeStorage implements TradeStorage {
         Cursor cursor = db.rawQuery("SELECT "
                 + "i." + TradeStorageContract.TradeInfoEntry._ID
                 + ", i." + TradeStorageContract.TradeInfoEntry.COLUMN_NAME_DATE
+                + ", i." + TradeStorageContract.TradeInfoEntry.COLUMN_NAME_PROVIDER_ID
+                + ", i." + TradeStorageContract.TradeInfoEntry.COLUMN_NAME_PROVIDER_NAME
                 + ", e." + TradeStorageContract.TradeEntry.COLUMN_NAME_TYPE
                 + ", e." + TradeStorageContract.TradeEntry.COLUMN_NAME_CARD_ID
                 + ", e." + TradeStorageContract.TradeEntry.COLUMN_NAME_COUNT
@@ -46,14 +48,14 @@ public class DbTradeStorage implements TradeStorage {
                 int tradeId = cursor.getInt(0);
                 if (lastTradeId == null || tradeId != lastTradeId) {
                     lastTradeId = tradeId;
-                    lastTradeInfo = new TradeInfo(cursor.getLong(1));
+                    lastTradeInfo = new TradeInfo(cursor.getLong(1), cursor.getString(2), cursor.getString(3));
                     result.add(lastTradeInfo);
                 }
-                String cardId = cursor.getString(3);
-                int count = cursor.getInt(4);
-                int price = cursor.getInt(5);
-                float multiplier = cursor.getFloat(6);
-                if (cursor.getInt(2) == MINE_ENTRY_TYPE) {
+                String cardId = cursor.getString(5);
+                int count = cursor.getInt(6);
+                int price = cursor.getInt(7);
+                float multiplier = cursor.getFloat(8);
+                if (cursor.getInt(4) == MINE_ENTRY_TYPE) {
                     lastTradeInfo.addMineCard(cardId, count, price, multiplier);
                 } else {
                     lastTradeInfo.addTheirCard(cardId, count, price, multiplier);
@@ -74,6 +76,8 @@ public class DbTradeStorage implements TradeStorage {
         try {
             ContentValues infoValues = new ContentValues();
             infoValues.put(TradeStorageContract.TradeInfoEntry.COLUMN_NAME_DATE, trade.getDate());
+            infoValues.put(TradeStorageContract.TradeInfoEntry.COLUMN_NAME_PROVIDER_ID, trade.getProviderId());
+            infoValues.put(TradeStorageContract.TradeInfoEntry.COLUMN_NAME_PROVIDER_NAME, trade.getProviderName());
 
             long infoId = db.insert(TradeStorageContract.TradeInfoEntry.TABLE_NAME, null, infoValues);
 

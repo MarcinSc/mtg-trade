@@ -20,7 +20,7 @@ public class MtgTraderApplication extends Application {
     private TradeStorage _tradeStorage;
 
     public MtgTraderApplication() {
-        GempProxyCardDataSource cardDataSource = new GempProxyCardDataSource("mtgGoldFish");
+        GempProxyCardDataSource cardDataSource = new GempProxyCardDataSource("mtgGoldFish", "MtgGoldFish.com");
 
         _cardProvider = new DbCardProvider(this, cardDataSource);
 

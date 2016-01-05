@@ -35,6 +35,16 @@ public class DbCardProvider implements CardProvider {
     }
 
     @Override
+    public String getProviderId() {
+        return _cardDataSource.getSourceId();
+    }
+
+    @Override
+    public String getDisplayName() {
+        return _cardDataSource.getDisplayName();
+    }
+
+    @Override
     public Iterable<CardInfo> findCards(String text, int maxCount) {
         if (text.trim().length() == 0)
             return Collections.emptyList();

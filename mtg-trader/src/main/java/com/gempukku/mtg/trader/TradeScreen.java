@@ -99,7 +99,7 @@ public class TradeScreen extends AppCompatActivity {
                             Toast toast = Toast.makeText(TradeScreen.this, getResources().getText(R.string.no_trade_to_store_toast), Toast.LENGTH_SHORT);
                             toast.show();
                         } else {
-                            TradeInfo tradeInfo = new TradeInfo(System.currentTimeMillis());
+                            TradeInfo tradeInfo = new TradeInfo(System.currentTimeMillis(), _cardProvider.getProviderId(), _cardProvider.getDisplayName());
                             int cardCountMine = _mineCardList.getCount();
                             for (int i = 0; i < cardCountMine; i++) {
                                 CardWithCountAndMultiplier myCard = _mineCardList.getItem(i);

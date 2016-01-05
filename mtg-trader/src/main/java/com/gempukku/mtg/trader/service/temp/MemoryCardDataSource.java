@@ -21,6 +21,16 @@ public class MemoryCardDataSource implements CardDataSource {
                 }
             });
 
+    @Override
+    public String getDisplayName() {
+        return "Test Source";
+    }
+
+    @Override
+    public String getSourceId() {
+        return "memory";
+    }
+
     public void addCard(CardInfo cardInfo) {
         _cards.add(cardInfo);
     }

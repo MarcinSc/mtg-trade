@@ -17,6 +17,10 @@ public interface CardProvider {
 
     View getCardDetailsScreen(Context context, String cardId);
 
+    String getProviderId();
+
+    String getDisplayName();
+
     interface ProgressUpdate {
         void updateProgress(int count, int max);
     }

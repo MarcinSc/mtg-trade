@@ -6,6 +6,10 @@ import com.gempukku.mtg.trader.service.CardProvider;
 public interface CardDataSource {
     CardProvider.CancellableUpdate updateInBackground(CardStorage cardStorage);
 
+    String getSourceId();
+
+    String getDisplayName();
+
     interface CardStorage {
         void startStoring(int max);
 

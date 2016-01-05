@@ -13,9 +13,21 @@ import java.net.URL;
 
 public class GempProxyCardDataSource implements CardDataSource {
     private String _providerId;
+    private String _displayName;
 
-    public GempProxyCardDataSource(String providerId) {
+    public GempProxyCardDataSource(String providerId, String displayName) {
         _providerId = providerId;
+        _displayName = displayName;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return _displayName;
+    }
+
+    @Override
+    public String getSourceId() {
+        return _providerId;
     }
 
     @Override

@@ -6,11 +6,15 @@ import java.util.List;
 
 public class TradeInfo {
     private long _date;
+    private String _providerId;
+    private String _providerName;
     private List<TradeEntry> _myCards = new LinkedList<TradeEntry>();
     private List<TradeEntry> _theirCards = new LinkedList<TradeEntry>();
 
-    public TradeInfo(long date) {
+    public TradeInfo(long date, String providerId, String providerName) {
         _date = date;
+        _providerId = providerId;
+        _providerName = providerName;
     }
 
     public void addMineCard(String cardId, int count, int price, float multiplier) {
@@ -31,5 +35,13 @@ public class TradeInfo {
 
     public long getDate() {
         return _date;
+    }
+
+    public String getProviderId() {
+        return _providerId;
+    }
+
+    public String getProviderName() {
+        return _providerName;
     }
 }
