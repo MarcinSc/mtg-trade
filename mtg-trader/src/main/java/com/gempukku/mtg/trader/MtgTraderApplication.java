@@ -9,7 +9,7 @@ import com.gempukku.mtg.trader.service.CardProvider;
 import com.gempukku.mtg.trader.service.TradeStorage;
 import com.gempukku.mtg.trader.service.db.card.DbCardProvider;
 import com.gempukku.mtg.trader.service.db.trade.DbTradeStorage;
-import com.gempukku.mtg.trader.service.tcgplayer.GempProxyCardDataSource;
+import com.gempukku.mtg.trader.service.proxy.GempProxyCardDataSource;
 
 import java.text.NumberFormat;
 import java.util.Date;
@@ -20,7 +20,7 @@ public class MtgTraderApplication extends Application {
     private TradeStorage _tradeStorage;
 
     public MtgTraderApplication() {
-        GempProxyCardDataSource cardDataSource = new GempProxyCardDataSource();
+        GempProxyCardDataSource cardDataSource = new GempProxyCardDataSource("mtgGoldFish");
 
         _cardProvider = new DbCardProvider(this, cardDataSource);
 

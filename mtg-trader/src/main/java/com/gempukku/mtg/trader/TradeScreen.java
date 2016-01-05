@@ -396,7 +396,7 @@ public class TradeScreen extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         updateProgressDialog.dismiss();
-                                        Toast toast = Toast.makeText(TradeScreen.this, errorMessage, Toast.LENGTH_SHORT);
+                                        Toast toast = Toast.makeText(TradeScreen.this, errorMessage, Toast.LENGTH_LONG);
                                         toast.show();
                                     }
                                 });

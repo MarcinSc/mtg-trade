@@ -1,4 +1,4 @@
-package com.gempukku.mtg.trader.service.tcgplayer;
+package com.gempukku.mtg.trader.service.proxy;
 
 import android.util.JsonReader;
 import com.gempukku.mtg.trader.dao.CardInfo;
@@ -12,6 +12,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class GempProxyCardDataSource implements CardDataSource {
+    private String _providerId;
+
+    public GempProxyCardDataSource(String providerId) {
+        _providerId = providerId;
+    }
+
     @Override
     public CardProvider.CancellableUpdate updateInBackground(CardStorage cardStorage) {
         final UpdateRunnable updateRunnable = new UpdateRunnable(cardStorage);
@@ -38,14 +44,20 @@ public class GempProxyCardDataSource implements CardDataSource {
         public void run() {
             boolean finishedWithoutError = false;
             try {
-                URL url = new URL("http://www.gempukku.com/mtg-cards/database.json");
+                URL url = new URL("http://www.gempukku.com/mtg-cards/database.json?provider=" + _providerId);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
                 try {
-
                     // expect HTTP 200 OK, so we don't mistakenly save error report
                     // instead of the file
-                    if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    int responseCode = connection.getResponseCode();
+                    if (responseCode == HttpURLConnection.HTTP_NO_CONTENT) {
+                        _cardStorage.error("This card database is unavailable at this time, try again later");
+                        return;
+                    } else if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
+                        _cardStorage.error("This card database is no longer available, switch to a different one in Settings");
+                        return;
+                    } else if (responseCode != HttpURLConnection.HTTP_OK) {
                         _cardStorage.error("Error communicating with the server, try again later");
                         return;
                     }
