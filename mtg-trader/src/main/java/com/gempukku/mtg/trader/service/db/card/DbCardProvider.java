@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.gempukku.mtg.trader.MtgTraderApplication;
@@ -111,7 +112,7 @@ public class DbCardProvider implements CardProvider {
         final DbCardInfo cardInfo = getCardById(cardId);
 
         LayoutInflater vi = LayoutInflater.from(context);
-        View rootView = vi.inflate(R.layout.tcg_cardinfo_fragment, null);
+        View rootView = vi.inflate(R.layout.db_cardinfo_fragment, null);
 
         TextView nameView = (TextView) rootView.findViewById(R.id.name);
         nameView.setText(cardInfo.getName());
@@ -123,6 +124,8 @@ public class DbCardProvider implements CardProvider {
         priceView.setText(MtgTraderApplication.formatPrice(cardInfo.getPrice()));
 
         View goToSiteButton = rootView.findViewById(R.id.goToSite);
+        String linkPrefix = context.getResources().getString(R.string.visit_card_site_prefix);
+        ((Button) goToSiteButton).setText(linkPrefix + _cardDataSource.getDisplayName());
         final String link = cardInfo.getLink();
         if (link != null) {
             goToSiteButton.setOnClickListener(
@@ -171,12 +174,13 @@ public class DbCardProvider implements CardProvider {
         }
 
         @Override
-        public void storeCard(CardInfo cardInfo) {
+        public void storeCard(DbCardInfo cardInfo) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(CardEntry.COLUMN_CARD_ID, cardInfo.getId());
             contentValues.put(CardEntry.COLUMN_NAME, cardInfo.getName());
             contentValues.put(CardEntry.COLUMN_INFO, cardInfo.getVersionInfo());
             contentValues.put(CardEntry.COLUMN_PRICE, cardInfo.getPrice());
+            contentValues.put(CardEntry.COLUMN_LINK, cardInfo.getLink());
 
             _db.insert(CardEntry.TABLE_NAME, null, contentValues);
             _storedCount++;

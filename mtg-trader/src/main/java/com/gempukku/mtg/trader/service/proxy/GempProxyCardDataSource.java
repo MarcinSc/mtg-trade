@@ -1,9 +1,9 @@
 package com.gempukku.mtg.trader.service.proxy;
 
 import android.util.JsonReader;
-import com.gempukku.mtg.trader.dao.CardInfo;
 import com.gempukku.mtg.trader.service.CardProvider;
 import com.gempukku.mtg.trader.service.db.card.CardDataSource;
+import com.gempukku.mtg.trader.service.db.card.DbCardInfo;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -113,30 +113,41 @@ public class GempProxyCardDataSource implements CardDataSource {
             reader.beginArray();
             while (reader.hasNext() && !_cancelled) {
                 reader.beginObject();
-                // First attribute should be "name"
-                String fieldName = reader.nextName();
-                String info = reader.nextString();
 
-                // Second attribute should be "cards"
-                String nextFieldName = reader.nextName();
-                readCardArray(reader, info);
+                String setLink = null;
+                String info = null;
+
+                while (reader.hasNext()) {
+                    String fieldName = reader.nextName();
+                    if (fieldName.equals("name")) {
+                        info = reader.nextString();
+                    } else if (fieldName.equals("link")) {
+                        setLink = reader.nextString();
+                    } else if (fieldName.equals("cards")) {
+                        readCardArray(reader, info, setLink);
+                    } else {
+                        reader.skipValue();
+                    }
+                }
+
                 reader.endObject();
             }
             reader.endArray();
         }
 
-        private void readCardArray(JsonReader reader, String info) throws IOException {
+        private void readCardArray(JsonReader reader, String info, String setLink) throws IOException {
             reader.beginArray();
             while (reader.hasNext() && !_cancelled) {
-                CardInfo cardInfo = readCard(reader, info);
+                DbCardInfo cardInfo = readCard(reader, info, setLink);
                 _cardStorage.storeCard(cardInfo);
             }
             reader.endArray();
         }
 
-        private CardInfo readCard(JsonReader reader, String info) throws IOException {
+        private DbCardInfo readCard(JsonReader reader, String info, String setLink) throws IOException {
             String id = null;
             String name = null;
+            String link = null;
             int price = 0;
 
             reader.beginObject();
@@ -148,12 +159,16 @@ public class GempProxyCardDataSource implements CardDataSource {
                     name = reader.nextString();
                 } else if (fieldName.equals("price")) {
                     price = reader.nextInt();
+                } else if (fieldName.equals("link")) {
+                    link = reader.nextString();
                 } else {
                     reader.skipValue();
                 }
             }
             reader.endObject();
-            return new CardInfo(id, name, info, price);
+
+            String cardLink = (link != null) ? link : setLink;
+            return new DbCardInfo(id, name, info, price, cardLink);
         }
 
         public void cancel() {

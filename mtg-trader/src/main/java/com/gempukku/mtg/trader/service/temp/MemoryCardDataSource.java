@@ -3,13 +3,14 @@ package com.gempukku.mtg.trader.service.temp;
 import com.gempukku.mtg.trader.dao.CardInfo;
 import com.gempukku.mtg.trader.service.CardProvider;
 import com.gempukku.mtg.trader.service.db.card.CardDataSource;
+import com.gempukku.mtg.trader.service.db.card.DbCardInfo;
 
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
 public class MemoryCardDataSource implements CardDataSource {
-    private Set<CardInfo> _cards = new TreeSet<CardInfo>(
+    private Set<DbCardInfo> _cards = new TreeSet<DbCardInfo>(
             new Comparator<CardInfo>() {
                 @Override
                 public int compare(CardInfo lhs, CardInfo rhs) {
@@ -31,7 +32,7 @@ public class MemoryCardDataSource implements CardDataSource {
         return "memory";
     }
 
-    public void addCard(CardInfo cardInfo) {
+    public void addCard(DbCardInfo cardInfo) {
         _cards.add(cardInfo);
     }
 
@@ -64,7 +65,7 @@ public class MemoryCardDataSource implements CardDataSource {
             _cardStorage.startStoring(max);
             boolean finishedWithoutError = false;
             try {
-                for (CardInfo card : _cards) {
+                for (DbCardInfo card : _cards) {
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException exp) {
