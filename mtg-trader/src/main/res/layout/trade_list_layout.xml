@@ -57,7 +57,7 @@
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 custom:displayWidth="30dp"
-                custom:textSize="18sp"
+                custom:textSize="16sp"
                 android:id="@+id/count"/>
         <ImageButton
                 android:layout_width="30dp"
@@ -83,7 +83,7 @@
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 custom:displayWidth="50dp"
-                custom:textSize="18sp"
+                custom:textSize="16sp"
                 android:id="@+id/multiplierPicker"/>
     </LinearLayout>
 </ViewSwitcher>

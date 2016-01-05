@@ -115,7 +115,7 @@ public class CardWithPriceListAdapter extends ArrayAdapter<CardWithCountAndMulti
 
             countPicker.setValue(1);
             countPicker.setMinValue(1);
-            countPicker.setMaxValue(100);
+            countPicker.setMaxValue(16);
 
             HorizontalScroller multiplierPicker = (HorizontalScroller) v.findViewById(R.id.multiplierPicker);
             multiplierPicker.setTag(position);
